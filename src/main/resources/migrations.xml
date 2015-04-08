@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="codahale">
+        <createTable tableName="people">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fullName" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jobTitle" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Savita">
+        <createTable tableName="profileView">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="viewedBy" type="bigint">
+                <constraints nullable="false" foreignKeyName="fkPerson" references="people"/>
+            </column>
+            <column name="visitedPerson" type="bigint">
+                <constraints nullable="false" foreignKeyName="fkVisitedPerson" references="people"/>
+            </column>
+            <column name="visitedAt" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
