@@ -34,4 +34,10 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="3" author="Savita">
+        <createIndex tableName="profileView" indexName="viewedBy_idx">
+            <column name="viewedBy"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
