@@ -36,7 +36,7 @@ To test the example application run the following commands.
 
 # Few design decisions:
 
-* Used simple schema with two tables _Person_ and ProfileView. Person has the Person details. ProfileView to store the profile visits.
+* Used simple schema with two tables ```Person``` and ```ProfileView```. ```Person``` has the Person details. ```ProfileView``` to store the profile visits.
 * Used meaningful naming conventions to avoid explicit comments in the code.
 * Cleanup job which runs every half hour and remove profileViews older than 10 days is required since application do not require that data.
 * Added index on the visitedBy column to make the visitors link work faster.
