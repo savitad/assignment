@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,7 +37,7 @@ public class VisitorsResource {
     public List<Person> visitorsOf(@PathParam("userId") LongParam userId) {
 
         Person user = findSafely(userId.get());
-        List<Person> visitors = user.getVisitors();
+        List<Person> visitors = profileViewDAO.getVisitorsFor(user);
         LOG.info(String.format("Found %d visitors for user: %s.", visitors.size(), user.getFullName()));
         return visitors;
     }

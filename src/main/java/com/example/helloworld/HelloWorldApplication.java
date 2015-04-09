@@ -32,6 +32,15 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
@@ -105,6 +114,25 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         environment.jersey().register(new PersonResource(dao, profileViewDAO));
         environment.jersey().register(new FilteredResource());
         environment.jersey().register(new VisitorsResource(dao, profileViewDAO));
+    }
+
+    private void startCleanupJobs(ProfileViewDAO profileViewDAO) {
+        JobDetail job = JobBuilder.newJob(CleanupJob.class).build();
+
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/30 * * * ?");
+
+        JobDataMap map = new JobDataMap();
+        map.put("dao", profileViewDAO);
+        Trigger trigger = TriggerBuilder.newTrigger().withSchedule(scheduleBuilder).usingJobData(map)
+                .build();
+
+        try {
+            Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+            scheduler.start();
+            scheduler.scheduleJob(job, trigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
     }
 
     private Function<AuthFilter.Tuple, SecurityContext> getSecurityContextFunction() {
